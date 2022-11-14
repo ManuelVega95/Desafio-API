@@ -2,6 +2,7 @@
 using DesafioAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace DesafioAPI.Controllers
 {
@@ -9,28 +10,40 @@ namespace DesafioAPI.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        //TRAER USUARIOS - CLASE 14
+        //TRAER USUARIOS
         [HttpGet(Name = "GetUsuarios")]
-        public List<Usuario> Get()
+        public IActionResult Get(string nombreUsuario)
         {
-            return ADO_Usuario.DevolverUsuarios();
+            Usuario u = ADO_Usuario.DevolverUsuarios(nombreUsuario);
+
+            if (u is null)
+            {
+                return BadRequest("El usuario no existe");
+            }
+            
+            return Ok(u);
         }
 
+        //CREAR USUARIOS
         [HttpPost]
-        public void Crear([FromBody] Usuario usu)
+        public IActionResult Crear([FromBody] Usuario usu)
         {
+            ADO_Usuario.CrearUsuario(usu);
+            return StatusCode(Convert.ToInt32(HttpStatusCode.Created));
         }
 
-        //MODIFICAR USUARIOS - DESAFÍO ENTREGABLE
+        //MODIFICAR USUARIOS
         [HttpPut]
         public void Actualizar([FromBody] Usuario usu)
         {
             ADO_Usuario.ModificarUsuario(usu);
         }
 
+        //ELIMINAR USUARIOS
         [HttpDelete]
         public void Eliminar([FromBody] int id)
         {
+            ADO_Usuario.EliminarUsuario(id);
         }
     }
 }

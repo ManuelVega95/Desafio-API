@@ -1,13 +1,20 @@
-﻿namespace DesafioAPI.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DesafioAPI.Model
 {
     public class Usuario
     {
-            public int Id { get; set; }
-            public string Nombre { get; set; }
-            public string Apellido { get; set; }
-            public string NombreUsuario { get; set; }
-            public string Contraseña { get; set; }
-            public string Mail { get; set; }
+        public int Id { get; set; }
+        [Required]
+        public string Nombre { get; set; }
+        [Required]
+        public string Apellido { get; set; }
+        [Required]
+        public string NombreUsuario { get; set; }
+        [Required]
+        public string Contraseña { get; set; }
+        [Required]
+        public string Mail { get; set; }
         
     }
 }

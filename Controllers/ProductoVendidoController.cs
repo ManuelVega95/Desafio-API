@@ -2,6 +2,7 @@
 using DesafioAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 
 namespace DesafioAPI.Controllers
 {
@@ -9,26 +10,11 @@ namespace DesafioAPI.Controllers
     [ApiController]
     public class ProductoVendidoController : ControllerBase
     {
-        //TRAER PRODUCTOS VENDIDOS - CLASE 14
+        //TRAER PRODUCTOS VENDIDOS
         [HttpGet(Name = "GetProductosVendidos")]
-        public List<ProductoVendido> Get()
+        public List<Producto> DevolverProductoVendido(int idUsuario)
         {
-            return ADO_ProductoVendido.DevolverProductosVendidos();
-        }
-
-        [HttpPost]
-        public void Crear([FromBody] ProductoVendido pv)
-        {
-        }
-
-        [HttpPut]
-        public void Actualizar([FromBody] ProductoVendido pv)
-        {
-        }
-
-        [HttpDelete]
-        public void Eliminar([FromBody] int id)
-        {
+            return ADO_ProductoVendido.DevolverProductoVendido(idUsuario);
         }
     }
 }

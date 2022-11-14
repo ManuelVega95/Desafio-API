@@ -7,7 +7,7 @@ namespace DesafioAPI.Repository
 {
     public class ADO_Producto
     {
-        //TRAER PRODUCTOS - CLASE 14
+        //TRAER PRODUCTOS
         public static List<Producto> DevolverProductos()
         {
             var listaProducto = new List<Producto>();
@@ -38,7 +38,7 @@ namespace DesafioAPI.Repository
             return listaProducto;
         }
 
-        //CREAR PRODUCTO - DESAFÍO ENTREGABLE
+        //CREAR PRODUCTO
         public static void CrearProducto(Producto pro)
         {
             var listaProducto = new List<Producto>();
@@ -107,7 +107,7 @@ namespace DesafioAPI.Repository
             }
         }
 
-        //MODIFICAR PRODUCTO - DESAFÍO ENTREGABLE
+        //MODIFICAR PRODUCTO
         public static void ActualizarProducto(Producto pro)
         {
             var listaProducto = new List<Producto>();
@@ -163,7 +163,7 @@ namespace DesafioAPI.Repository
             }
         }
 
-        //ELIMINAR PRODUCTO - DESAFÍO ENTREGABLE
+        //ELIMINAR PRODUCTO
         public static void EliminarProducto(int id)
         {
             var listaProducto = new List<Producto>();
@@ -171,27 +171,18 @@ namespace DesafioAPI.Repository
             using (SqlConnection conn = new SqlConnection(General.connectionString()))
             {
                 conn.Open();
+
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = String.Format("DELETE FROM ProductoVendido WHERE IdProducto = {0}", id);
+                cmd.ExecuteNonQuery();
+
+
                 cmd.CommandText = string.Format("DELETE FROM Producto WHERE Id = {0}", id);
-                var reader = cmd.ExecuteReader();
+                cmd.ExecuteNonQuery();
 
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        Producto producto = new Producto();
-                        producto.Id = Convert.ToInt32(reader.GetValue(0));
-                        producto.Descripciones = reader.GetValue(1).ToString();
-                        producto.Costo = Convert.ToDouble(reader.GetValue(2));
-                        producto.PrecioVenta = Convert.ToDouble(reader.GetValue(3));
-                        producto.Stock = Convert.ToInt32(reader.GetValue(4));
-                        producto.IdUsuario = Convert.ToInt32(reader.GetValue(5));
 
-                        listaProducto.Remove(producto);
-                    }
-                    reader.Close();
-                    conn.Close();
-                }
+                conn.Close();
+                
             }
         }
     }

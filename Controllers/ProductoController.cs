@@ -3,6 +3,7 @@ using DesafioAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using System.Net;
 
 namespace DesafioAPI.Controllers
 {
@@ -10,28 +11,34 @@ namespace DesafioAPI.Controllers
     [ApiController]
     public class ProductoController : ControllerBase
     {
-        //TRAER PRODUCTOS - CLASE 14
+        //TRAER PRODUCTOS
         [HttpGet(Name = "GetProductos")]
-        public List<Producto> Get()
+        public IActionResult Get()
         {
-            return ADO_Producto.DevolverProductos();
+            List<Producto> productos = ADO_Producto.DevolverProductos();
+            if (productos.Count>0)
+            {
+                return Ok(productos);
+            }
+            return NoContent();
         }
 
-        //CREAR PRODUCTO - DESAFÍO ENTREGABLE
+        //CREAR PRODUCTO
         [HttpPost]
-        public void Crear([FromBody] Producto pro)
+        public IActionResult Crear([FromBody] Producto pro)
         {
             ADO_Producto.CrearProducto(pro);
+            return StatusCode(Convert.ToInt32(HttpStatusCode.Created));
         }
 
-        //MODIFICAR PRODUCTO - DESAFÍO ENTREGABLE
+        //MODIFICAR PRODUCTO
         [HttpPut]
         public void Actualizar([FromBody] Producto pro)
         {
             ADO_Producto.ActualizarProducto(pro);
         }
 
-        //ELIMINAR PRODUCTO - DESAFÍO ENTREGABLE
+        //ELIMINAR PRODUCTO
         [HttpDelete]
         public void Eliminar([FromBody] int id)
         {

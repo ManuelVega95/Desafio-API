@@ -6,35 +6,33 @@ namespace DesafioAPI.Repository
 {
     public class ADO_ProductoVendido
     {
-        public static string cs;
-
-        public static List<ProductoVendido> DevolverProductosVendidos()
+        //TRAER PRODUCTOS VENDIDOS
+        public static List<Producto> DevolverProductoVendido(int idUsuario)
         {
-            var listaProductoVendido = new List<ProductoVendido>();
-           
-
             using (SqlConnection conn = new SqlConnection(General.connectionString()))
             {
                 conn.Open();
+                List<Producto> productos = new List<Producto>();
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM ProductoVendido";
+                cmd.CommandText = string.Format("SELECT p.Id, p.Descripciones,p.Costo,p.PrecioVenta, p.Stock,p.IdUsuario FROM ProductoVendido pv inner join Producto p on pv.IdProducto = p.Id inner join usuario u on p.idusuario = u.id where u.id = {0} order by id", idUsuario);
                 var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                if (reader.HasRows)
                 {
-                    var productoVendido = new ProductoVendido();
-
-                    productoVendido.Id = Convert.ToInt32(reader.GetValue(0));
-                    productoVendido.IdProducto = Convert.ToInt32(reader.GetValue(1));
-                    productoVendido.Stock = Convert.ToInt32(reader.GetValue(2));
-                    productoVendido.IdVenta = Convert.ToInt32(reader.GetValue(3));
-
-                    listaProductoVendido.Add(productoVendido);
+                    while (reader.Read())
+                    {
+                        Producto producto = new Producto();
+                        producto.Id = Convert.ToInt32(reader.GetValue(0));
+                        producto.Descripciones = reader.GetValue(1).ToString();
+                        producto.Costo = Convert.ToDouble(reader.GetValue(2));
+                        producto.PrecioVenta = Convert.ToDouble(reader.GetValue(3));
+                        producto.Stock = Convert.ToInt32(reader.GetValue(4));
+                        producto.IdUsuario = Convert.ToInt32(reader.GetValue(5));
+                        productos.Add(producto);
+                    }
                 }
                 reader.Close();
-                conn.Close();
+                return productos;
             }
-            return listaProductoVendido;
         }
     }
 }

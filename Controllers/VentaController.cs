@@ -9,28 +9,25 @@ namespace DesafioAPI.Controllers
     [ApiController]
     public class VentaController : ControllerBase
     {
-        //TRAER VENTAS - CLASE 14
+        //TRAER VENTAS
         [HttpGet(Name = "GetVentas")]
-        public List<Venta> Get()
+        public List<DevolverVentas> Get()
         {
             return ADO_Venta.DevolverVentas();
         }
 
-        //CARGAR VENTA - DESAFÍO ENTREGABLE
+        //CARGAR VENTA
         [HttpPost]
         public void CargarVenta([FromBody] CargarVenta productos, int IdUsuario)
         {
             ADO_Venta.CargarVenta(productos, IdUsuario);
         }
 
-        [HttpPut]
-        public void Actualizar([FromBody] Venta ven)
-        {
-        }
-
+        //ELIMINAR VENTA
         [HttpDelete]
-        public void Eliminar([FromBody] int id)
+        public void Eliminar([FromBody] EliminarVenta productos, int id)
         {
+            ADO_Venta.EliminarVenta(productos, id);
         }
     }
 }
